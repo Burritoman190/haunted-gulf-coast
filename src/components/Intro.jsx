@@ -31,7 +31,7 @@ export default function Intro({ count, onEnter }) {
           <br />
           Beaumont · Bridge City &amp; Orange · Port Arthur · Lake Charles
         </p>
-        <button type="button" className="btn intro-btn" onClick={enter} autoFocus>
+        <button type="button" className="btn intro-btn" onClick={enter} ref={(el) => el?.focus({ preventScroll: true })}>
           Enter if you dare
         </button>
         <p className="intro-note">Stories are folklore. Respect private property &amp; posted hours.</p>

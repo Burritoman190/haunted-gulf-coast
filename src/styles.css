@@ -197,7 +197,7 @@ button, input, select { font: inherit; color: inherit; }
 
 /* ---------- Intro ---------- */
 .intro {
-  position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; overflow: hidden; text-align: center;
+  position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; overflow: hidden; overflow: clip; text-align: center;
   background: radial-gradient(ellipse at 50% 120%, #2a1d3d 0%, #0b0a10 60%, #050408 100%);
   transition: opacity 0.7s ease, filter 0.7s ease;
 }
