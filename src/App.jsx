@@ -61,7 +61,7 @@ export default function App() {
       return next
     })
 
-  const legendCount = LOCATIONS.filter((l) => l.lore === 'documented').length
+  const legendCount = LOCATIONS.filter((l) => l.lore === 'legend').length
 
   return (
     <div className="app">
@@ -70,8 +70,9 @@ export default function App() {
           <span aria-hidden="true">👻</span> Haunted Gulf Coast
         </h1>
         <p>
-          {LOCATIONS.length} eerie stops across Beaumont, Bridge City, Port Arthur &amp; Lake Charles, including {legendCount} with
-          well-documented ghost legends. Filter, explore the map and build a ghost-hunting road trip.
+          {LOCATIONS.length} reportedly haunted places, rumors and ghost tours across Beaumont, Bridge City &amp; Orange, Port
+          Arthur and Lake Charles, including {legendCount} famous local legends. Filter, explore the map and build a ghost-hunting
+          road trip.
         </p>
       </header>
 
@@ -95,7 +96,7 @@ export default function App() {
             aria-label="Search"
           />
           <select value={lore} onChange={(e) => setLore(e.target.value)} aria-label="Legend strength">
-            <option value="all">Any legend strength</option>
+            <option value="all">Legends, rumors &amp; tours</option>
             {Object.entries(LORE).map(([id, l]) => (
               <option key={id} value={id}>{l.label}</option>
             ))}
@@ -113,9 +114,9 @@ export default function App() {
         <div className="map-wrap">
           <MapView locations={visible} selected={selected} onSelect={select} trip={trip} />
           <div className="legend" aria-hidden="true">
-            <span><i className="dot dot-documented" /> Legend</span>
-            <span><i className="dot dot-local-lore" /> Lore</span>
-            <span><i className="dot dot-atmosphere" /> Vibes</span>
+            <span><i className="dot dot-legend" /> Legend</span>
+            <span><i className="dot dot-rumor" /> Rumor</span>
+            <span><i className="dot dot-talk" /> Tour / talk</span>
           </div>
         </div>
 
@@ -148,7 +149,7 @@ export default function App() {
       </main>
 
       <footer className="foot">
-        Ghost stories are folklore, not verified fact. Respect private property, cemeteries and posted hours. Coordinates are approximate.
+        These are reported ghost stories and rumors, not verified fact. Respect private property, cemeteries and posted hours. Coordinates are approximate.
       </footer>
     </div>
   )
