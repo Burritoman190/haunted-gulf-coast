@@ -416,3 +416,31 @@ export const LOCATIONS = [
     sources: ['https://www.kplctv.com/2025/04/11/is-lake-charles-haunted-new-attraction-takes-guests-paranormal-tour-downtown'],
   },
 ]
+
+// Fright meter (1-5 ghosts): how strong, specific and widely told each story is.
+const FRIGHT = {
+  'calcasieu-courthouse': 5,
+  'sarah-jane-road': 5,
+  'bragg-road': 5,
+  'rosa-hart-theatre': 4,
+  'ghost-lady-7th': 4,
+  'sabine-pass-lighthouse': 4,
+  'mcfaddin-beach': 4,
+  'john-jay-french': 4,
+  'forest-lawn-kissing-statue': 3,
+  'big-woods-cemetery': 3,
+  'sigep-house': 3,
+  'holiday-inn-11th': 3,
+  'spindletop-gladys-city': 3,
+  'mcfaddin-ward': 3,
+  'wilkinson-cemetery': 3,
+  'blood-road': 3,
+  'spirit-guides-tour': 3,
+  'tyrrell-library': 2,
+  'julie-rogers': 2,
+  'hotel-sabine': 2,
+  'port-arthur-ghost-walk': 2,
+  'imperial-calcasieu-museum': 2,
+}
+
+for (const loc of LOCATIONS) loc.fright = FRIGHT[loc.id] ?? 2

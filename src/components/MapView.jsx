@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker, useMap } from 'react-leaflet'
+import MarkerClusterGroup from 'react-leaflet-cluster'
 import L from 'leaflet'
 import { CATEGORIES } from '../data/locations.js'
 
@@ -11,6 +12,14 @@ function pinIcon(location, { selected, tripIndex }) {
     iconSize: [36, 36],
     iconAnchor: [18, 18],
     popupAnchor: [0, -18],
+  })
+}
+
+function clusterIcon(cluster) {
+  return L.divIcon({
+    className: '',
+    html: `<div class="cluster"><span>👻</span><b>${cluster.getChildCount()}</b></div>`,
+    iconSize: [44, 44],
   })
 }
 
@@ -32,12 +41,12 @@ function FitBounds({ locations }) {
 function FlyTo({ location }) {
   const map = useMap()
   useEffect(() => {
-    if (location) map.flyTo([location.lat, location.lng], Math.max(map.getZoom(), 14), { duration: 0.6 })
+    if (location) map.flyTo([location.lat, location.lng], Math.max(map.getZoom(), 15), { duration: 0.6 })
   }, [location, map])
   return null
 }
 
-export default function MapView({ locations, selected, onSelect, trip }) {
+export default function MapView({ locations, selected, onSelect, trip, userPos }) {
   const tripIds = trip.map((t) => t.id)
   return (
     <MapContainer center={[30.05, -93.7]} zoom={9} className="map" scrollWheelZoom>
@@ -49,22 +58,34 @@ export default function MapView({ locations, selected, onSelect, trip }) {
       <FitBounds locations={locations} />
       <FlyTo location={selected} />
       {trip.length > 1 && (
-        <Polyline positions={trip.map((t) => [t.lat, t.lng])} pathOptions={{ color: '#ff8a3d', weight: 3, dashArray: '6 8' }} />
+        <Polyline
+          positions={trip.map((t) => [t.lat, t.lng])}
+          pathOptions={{ color: '#ff8a3d', weight: 3, dashArray: '8 10', className: 'route-line' }}
+        />
       )}
-      {locations.map((loc) => (
-        <Marker
-          key={loc.id}
-          position={[loc.lat, loc.lng]}
-          icon={pinIcon(loc, { selected: selected?.id === loc.id, tripIndex: tripIds.indexOf(loc.id) })}
-          eventHandlers={{ click: () => onSelect(loc) }}
-        >
-          <Popup>
-            <strong>{loc.name}</strong>
-            <br />
-            {loc.address}
-          </Popup>
-        </Marker>
-      ))}
+      {userPos && (
+        <CircleMarker center={[userPos.lat, userPos.lng]} radius={9} pathOptions={{ color: '#4fc3ff', fillColor: '#4fc3ff', fillOpacity: 0.8, className: 'you-are-here' }}>
+          <Popup>You are here</Popup>
+        </CircleMarker>
+      )}
+      <MarkerClusterGroup iconCreateFunction={clusterIcon} maxClusterRadius={40} showCoverageOnHover={false} spiderfyOnMaxZoom>
+        {locations.map((loc) => (
+          <Marker
+            key={loc.id}
+            position={[loc.lat, loc.lng]}
+            icon={pinIcon(loc, { selected: selected?.id === loc.id, tripIndex: tripIds.indexOf(loc.id) })}
+            eventHandlers={{ click: () => onSelect(loc) }}
+          >
+            <Popup>
+              <strong>{loc.name}</strong>
+              <br />
+              {'👻'.repeat(loc.fright)}
+              <br />
+              {loc.address}
+            </Popup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
     </MapContainer>
   )
 }
