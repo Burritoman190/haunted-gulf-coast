@@ -228,3 +228,83 @@ button, input, select { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+/* ---------- Gemma button ---------- */
+.hero { position: relative; }
+.gemma-btn {
+  float: right; margin: 4px 0 8px 12px; background: #1f1830; border: 1px solid #5b3f8a; color: var(--text);
+  border-radius: 999px; padding: 7px 14px; cursor: pointer; font-weight: 600;
+  box-shadow: 0 0 14px rgba(180, 140, 255, 0.35);
+}
+.gemma-btn:hover { border-color: var(--rumor); }
+.gemma-btn.connected { border-color: #3fae7f; box-shadow: 0 0 14px rgba(95, 201, 181, 0.35); }
+
+/* ---------- Modal ---------- */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 1500; background: rgba(5, 4, 10, 0.78); backdrop-filter: blur(4px);
+  display: grid; place-items: center; padding: 16px; overflow-y: auto;
+}
+.modal {
+  position: relative; width: min(560px, 100%); max-height: calc(100vh - 32px); overflow-y: auto;
+  background: linear-gradient(180deg, #221a30, var(--panel)); border: 1px solid #4a3561; border-radius: 16px;
+  padding: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(180, 140, 255, 0.15);
+}
+.modal-small { width: min(440px, 100%); }
+.modal h2 { margin: 0 0 2px; }
+.modal-place { margin: 0 0 12px; color: var(--accent); font-weight: 600; }
+.modal-close {
+  position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+  background: var(--panel-2); border: 1px solid var(--border);
+}
+.step { border-top: 1px solid var(--border); padding: 12px 0; }
+.step h3 { margin: 0 0 8px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+.step-num {
+  background: var(--rumor); color: #140c22; border-radius: 999px; width: 22px; height: 22px;
+  display: inline-grid; place-items: center; font-size: 0.8rem; font-weight: 700;
+}
+.ok { color: #7fe0b5; margin: 0; }
+.warn { color: #ffcf8a; margin: 0; }
+.small { font-size: 0.8rem; margin: 4px 0; }
+.link-btn { background: none; border: none; color: var(--accent); text-decoration: underline; cursor: pointer; padding: 0; }
+.snapshot { display: grid; gap: 8px; justify-items: start; }
+.snapshot img { width: 100%; max-height: 280px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); }
+.scanning {
+  height: 4px; margin-top: 10px; border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--rumor), transparent); background-size: 50% 100%;
+  background-repeat: no-repeat; animation: scan 1.1s linear infinite;
+}
+@keyframes scan { from { background-position: -50% 0; } to { background-position: 150% 0; } }
+.reading {
+  margin-top: 12px; padding: 14px; border-radius: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid #4a3561;
+  animation: materialize 0.8s ease;
+}
+@keyframes materialize { from { opacity: 0; filter: blur(6px); transform: translateY(6px); } }
+.reading p { margin: 6px 0; }
+.verdict { font-size: 1.25rem; font-weight: 700; color: var(--legend); text-shadow: 0 0 12px rgba(255, 93, 115, 0.45); }
+.spook-bar { height: 8px; border-radius: 999px; background: var(--panel-2); overflow: hidden; }
+.spook-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--talk), var(--rumor), var(--legend)); }
+.anomalies { margin: 6px 0; padding-left: 4px; list-style: none; display: grid; gap: 2px; font-size: 0.9rem; }
+.modal-actions { display: flex; flex-wrap: wrap; gap: 8px; border-top: 1px solid var(--border); padding-top: 12px; }
+.key-steps { padding-left: 18px; color: var(--muted); font-size: 0.9rem; }
+.field { display: grid; gap: 4px; margin: 10px 0; font-size: 0.9rem; }
+.field input, .field select { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+
+/* ---------- Passport ---------- */
+.passport { background: linear-gradient(180deg, #1a2420, var(--panel)); border: 1px solid #2f5a4c; border-radius: var(--radius); padding: 14px; }
+.passport h2 { margin: 0; font-size: 1.1rem; }
+.passport-bar { height: 6px; border-radius: 999px; background: var(--panel-2); margin: 10px 0; overflow: hidden; }
+.passport-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--talk), #7fe0b5); transition: width 0.4s; }
+.stamps { list-style: none; margin: 0 0 6px; padding: 0; display: grid; gap: 6px; max-height: 240px; overflow-y: auto; }
+.stamp {
+  width: 100%; display: flex; gap: 10px; align-items: center; text-align: left; cursor: pointer;
+  background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border); border-radius: 10px; padding: 6px;
+}
+.stamp img, .stamp-ghost { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex: none; display: grid; place-items: center; background: var(--panel-2); }
+.stamp-text { display: grid; min-width: 0; font-size: 0.85rem; }
+.stamp-text strong, .stamp-text em { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stamp-text span { color: var(--muted); font-size: 0.78rem; }
+.stamp-text em { color: var(--legend); font-size: 0.8rem; }
+.btn-checkin { border-color: #2f5a4c; }
+
+@media (max-width: 560px) {
+  .gemma-btn { float: none; display: inline-block; margin: 0 0 10px; }
+}

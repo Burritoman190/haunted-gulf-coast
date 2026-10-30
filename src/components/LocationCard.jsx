@@ -6,7 +6,7 @@ import FrightMeter from './FrightMeter.jsx'
 const cityName = (id) => CITIES.find((c) => c.id === id)?.name
 
 const LocationCard = forwardRef(function LocationCard(
-  { location: loc, selected, inTrip, distance, speaking, onSelect, onToggleTrip, onNarrate },
+  { location: loc, selected, inTrip, distance, speaking, checkedIn, onSelect, onToggleTrip, onNarrate, onCheckIn },
   ref,
 ) {
   const restricted = loc.access === 'restricted'
@@ -64,6 +64,16 @@ const LocationCard = forwardRef(function LocationCard(
               {speaking ? '■ Stop' : '🔊 Tell me the story'}
             </button>
           )}
+          <button
+            type="button"
+            className="btn btn-ghost btn-checkin"
+            onClick={(e) => {
+              e.stopPropagation()
+              onCheckIn(loc)
+            }}
+          >
+            {checkedIn ? '🏅 Checked in' : '📸 Check in'}
+          </button>
         </span>
         <span className="sources">
           {loc.sources.map((url, i) => (

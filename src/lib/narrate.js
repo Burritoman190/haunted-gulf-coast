@@ -1,4 +1,4 @@
-// Reads a location's story aloud with the browser's built-in Web Speech API (no keys, no server).
+// Reads text aloud with the browser's built-in Web Speech API (no keys, no server).
 
 export const canNarrate = typeof window !== 'undefined' && 'speechSynthesis' in window
 
@@ -12,10 +12,9 @@ function pickVoice() {
   )
 }
 
-export function narrate(loc, { onEnd } = {}) {
+export function speak(text, { onEnd } = {}) {
   if (!canNarrate) return
   window.speechSynthesis.cancel()
-  const text = `${loc.name}. ${loc.story} Visitor tip: ${loc.tip}`
   const u = new SpeechSynthesisUtterance(text)
   const voice = pickVoice()
   if (voice) u.voice = voice
@@ -24,6 +23,10 @@ export function narrate(loc, { onEnd } = {}) {
   u.onend = onEnd
   u.onerror = onEnd
   window.speechSynthesis.speak(u)
+}
+
+export function narrate(loc, opts) {
+  speak(`${loc.name}. ${loc.story} Visitor tip: ${loc.tip}`, opts)
 }
 
 export function stopNarration() {

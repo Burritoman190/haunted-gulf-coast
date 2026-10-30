@@ -6,6 +6,11 @@ import MapView from './components/MapView.jsx'
 import LocationCard from './components/LocationCard.jsx'
 import TripPanel from './components/TripPanel.jsx'
 import Intro from './components/Intro.jsx'
+import CheckInModal from './components/CheckInModal.jsx'
+import KeySettings from './components/KeySettings.jsx'
+import Passport from './components/Passport.jsx'
+import { loadPassport, savePassport } from './lib/checkins.js'
+import { getApiKey } from './lib/gemma.js'
 
 const TRIP_KEY = 'haunted-gulf-coast:trip'
 
@@ -31,7 +36,27 @@ export default function App() {
   const [userPos, setUserPos] = useState(null)
   const [geoStatus, setGeoStatus] = useState('')
   const [speakingId, setSpeakingId] = useState(null)
+  const [checkInLoc, setCheckInLoc] = useState(null)
+  const [showSettings, setShowSettings] = useState(false)
+  const [passport, setPassport] = useState(loadPassport)
+  const [hasKey, setHasKey] = useState(() => !!getApiKey())
   const cardRefs = useRef({})
+
+  const addStamp = (entry) => {
+    setPassport((p) => {
+      const next = [...p, entry]
+      savePassport(next)
+      return next
+    })
+    setCheckInLoc(null)
+  }
+
+  const clearPassport = () => {
+    setPassport([])
+    savePassport([])
+  }
+
+  const checkedInIds = useMemo(() => new Set(passport.map((e) => e.locationId)), [passport])
 
   useEffect(() => {
     try {
@@ -113,15 +138,35 @@ export default function App() {
   return (
     <>
       {showIntro && <Intro count={LOCATIONS.length} onEnter={() => setShowIntro(false)} />}
+      {checkInLoc && (
+        <CheckInModal
+          location={checkInLoc}
+          onClose={() => setCheckInLoc(null)}
+          onSave={addStamp}
+          onOpenSettings={() => setShowSettings(true)}
+        />
+      )}
+      {showSettings && (
+        <KeySettings
+          onClose={() => {
+            setShowSettings(false)
+            setHasKey(!!getApiKey())
+          }}
+        />
+      )}
       <div className="app">
         <header className="hero">
+          <button type="button" className={`gemma-btn${hasKey ? ' connected' : ''}`} onClick={() => setShowSettings(true)}>
+            🔮 {hasKey ? 'Gemma 4 connected' : 'Connect Gemma 4'}
+          </button>
           <h1>
             <span className="hero-ghost" aria-hidden="true">👻</span> <span className="flicker">Haunted Gulf Coast</span>
           </h1>
           <p>
             {LOCATIONS.length} reportedly haunted places, rumors and ghost tours across Beaumont, Bridge City &amp; Orange, Port
             Arthur and Lake Charles, including {legendCount} famous local legends. Filter, explore the map, listen to the stories
-            and build a ghost-hunting road trip.
+            and build a ghost-hunting road trip. On site? Check in with a photo and let <strong>Gemma 4</strong> give you a
+            paranormal reading.
           </p>
         </header>
 
@@ -187,6 +232,15 @@ export default function App() {
               onOptimize={() => setTrip((t) => optimizeOrder(t))}
               onClear={() => setTrip([])}
             />
+            <Passport
+              entries={passport}
+              total={LOCATIONS.length}
+              onClear={clearPassport}
+              onSelect={(id) => {
+                const loc = LOCATIONS.find((l) => l.id === id)
+                if (loc) select(loc)
+              }}
+            />
             <p className="result-count">
               {visible.length} place{visible.length === 1 ? '' : 's'}
             </p>
@@ -200,9 +254,15 @@ export default function App() {
                   inTrip={trip.some((t) => t.id === loc.id)}
                   distance={userPos ? distances[loc.id] : null}
                   speaking={speakingId === loc.id}
+                  checkedIn={checkedInIds.has(loc.id)}
                   onSelect={select}
                   onToggleTrip={toggleTrip}
                   onNarrate={toggleNarration}
+                  onCheckIn={(l) => {
+                    stopNarration()
+                    setSpeakingId(null)
+                    setCheckInLoc(l)
+                  }}
                 />
               ))}
               {visible.length === 0 && <p className="muted">Nothing spooky matches those filters.</p>}
